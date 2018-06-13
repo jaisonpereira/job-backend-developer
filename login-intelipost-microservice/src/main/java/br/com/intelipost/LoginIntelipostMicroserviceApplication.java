@@ -2,10 +2,9 @@ package br.com.intelipost;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.ComponentScan;
-
-@EnableEurekaClient
+//TODO HABILITAR EUREKA CLIENT
+//@EnableEurekaClient
 @SpringBootApplication
 @ComponentScan(basePackages = "br.com.intelipost")
 public class LoginIntelipostMicroserviceApplication {
