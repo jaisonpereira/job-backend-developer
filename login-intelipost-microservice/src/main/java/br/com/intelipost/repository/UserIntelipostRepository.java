@@ -10,4 +10,5 @@ public interface UserIntelipostRepository extends JpaRepository<UserIntelipost, 
 
 	UserIntelipost findByEmail(String email);
 
+	long count();
 }

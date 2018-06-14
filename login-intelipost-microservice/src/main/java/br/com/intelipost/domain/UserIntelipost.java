@@ -26,6 +26,16 @@ public class UserIntelipost implements Serializable {
 
 	private String email;
 
+	public UserIntelipost() {
+	}
+
+	public UserIntelipost(String password, String name, String email) {
+		super();
+		this.password = password;
+		this.name = name;
+		this.email = email;
+	}
+
 	public Long getId() {
 		return id;
 	}
