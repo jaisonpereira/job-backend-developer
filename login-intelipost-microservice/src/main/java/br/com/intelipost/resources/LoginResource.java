@@ -16,7 +16,6 @@ public class LoginResource {
 	@ResponseBody
 	public String getMessage(HttpServletRequest request) {
 		logger.trace("Request by: " + request.getServerName() + ":" + request.getServerPort());
-
 		return "login";
 	}
 }

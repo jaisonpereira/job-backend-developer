@@ -2,10 +2,22 @@ package br.com.intelipost.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+
+@Entity
 public class UserIntelipost implements Serializable {
 
 	private static final long serialVersionUID = -6561175049347593808L;
 
+	@Id
+	@SequenceGenerator(name = "pk_sequence", sequenceName = "user_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence")
+	@Column(name = "id", unique = true, nullable = false)
 	private Long id;
 
 	private String password;
