@@ -8,8 +8,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="tb_user_intelipost")
 public class UserIntelipost implements Serializable {
 
 	private static final long serialVersionUID = -6561175049347593808L;
@@ -31,6 +33,15 @@ public class UserIntelipost implements Serializable {
 
 	public UserIntelipost(String password, String name, String email) {
 		super();
+		this.password = password;
+		this.name = name;
+		this.email = email;
+	}
+	
+
+	public UserIntelipost(Long id, String password, String name, String email) {
+		super();
+		this.id = id;
 		this.password = password;
 		this.name = name;
 		this.email = email;
