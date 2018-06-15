@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br" ng-app="intelipostLogin">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<title>Login - Intelipost</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="css/intelipost-login.css">
+<script src="js/lib/angular.min.js"></script>
+<script src="js/main.js"></script>
+<script src="js/controllers/login-controller.js"></script>
+</head>
+<body ng-controller="LoginController">
+	<form ng-if="!logado" class="form-signin" ng-submit="login()">
+		<img class="mb-4" src="assets/logo-intelipost.jpg" alt="" width="200"
+			height="200">
+		<h1 class="h3 mb-3 font-weight-normal">Login - Intelipost</h1>
+		<label for="inputEmail" class="sr-only">Email</label> <input
+			ng-model="credenciais.email" type="email" id="inputEmail"
+			class="form-control" placeholder="Email" required autofocus>
+		<label for="inputPassword" class="sr-only">Senha</label> <input
+			ng-model="credenciais.senha" type="password" id="inputPassword"
+			class="form-control" placeholder="Senha" required>
+		<button class="btn btn-lg btn-primary btn-block" href="/">Sign
+			in</button>
+		<div ng-if="error" class="alert alert-danger" role="alert">
+			<span aria-hidden="true"></span> <span class="sr-only">Error:</span>
+			{{error}}
+		</div>
+		<p class="mt-5 mb-3 text-muted">&copy; 2017-2018 Design by Jaison
+			Pereira</p>
+	</form>
+	<div ng-if="logado" class="container">
+		<div class="jumbotron">
+			<h1>Logado com sucesso!</h1>
+			<p>Autenticação efetuada via JWT</p>
+			<p>
+				<a class="btn btn-primary btn-lg" ng-click="backToLogin()"
+					role="button">Return to Login</a>
+			</p>
+		</div>
+	</div>
+</body>
+</html>
