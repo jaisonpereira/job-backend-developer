@@ -6,9 +6,7 @@ import org.springframework.stereotype.Repository;
 import br.com.intelipost.domain.UserIntelipost;
 
 @Repository
-public interface UserIntelipostRepository extends JpaRepository<UserIntelipost, Long> {
-
-	UserIntelipost findByEmail(String email);
+public interface UserIntelipostRepository extends JpaRepository<UserIntelipost, Long>, UserIntelipostRepositoryCustom {
 
 	long count();
 }

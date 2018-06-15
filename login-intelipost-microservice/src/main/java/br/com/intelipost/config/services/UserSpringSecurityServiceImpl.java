@@ -18,7 +18,7 @@ public class UserSpringSecurityServiceImpl implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		UserIntelipost user = repository.findByEmail(email);
+		UserIntelipost user = repository.getUserByEmail(email);
 
 		if (user == null) {
 			throw new UsernameNotFoundException(email);
