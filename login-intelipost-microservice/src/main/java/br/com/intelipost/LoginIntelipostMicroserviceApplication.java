@@ -3,10 +3,11 @@ package br.com.intelipost;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.ComponentScan;
 
 //TODO HABILITAR EUREKA CLIENT
-//@EnableEurekaClient
+@EnableEurekaClient
 @SpringBootApplication
 @ComponentScan(basePackages = "br.com.intelipost")
 @EnableCaching

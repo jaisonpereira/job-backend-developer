@@ -1,0 +1,35 @@
+redis:
+  image: redis
+  expose:
+    - "6379"
+
+postgres:
+  image: postgres
+  expose:
+    - "5432"
+
+eureka:
+  image: intelipost/eureka-server
+  expose:
+    - "8761"
+  ports:
+    - "8761:8761"
+
+zuul-gateway:
+  image: intelipost/zuul-gateway
+  links:
+    - eureka
+    - login-intelipost-microservice_1
+  expose:
+    - "8080"
+  ports:
+    - "8080:8080"
+
+login-intelipost-microservice_1:
+  image: intelipost/login-intelipost-microservice
+  links:
+    - eureka
+    - postgres
+    - redis
+  expose:
+    - "8100"

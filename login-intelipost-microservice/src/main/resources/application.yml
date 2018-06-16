@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: login-intelipost-microservice
+  session:
+    store-type: redis
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password:
+    driver-class-name: org.postgresql.Driver
+    testWhileIdle: true
+    validationQuery: SELECT 1
+    initiliaze: true
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: update
+  redis:
+    host: localhost
+
+server:
+  port: ${SERVER_PORT:8081}
+
+
+eureka:
+  instance:
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${random.int(1,9999)}}
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+
+---
+spring:
+  profiles: docker
+  datasource:
+    url: jdbc:postgresql://postgres:5432/postgres
+  redis:
+    host: redis
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka:8761/eureka/
