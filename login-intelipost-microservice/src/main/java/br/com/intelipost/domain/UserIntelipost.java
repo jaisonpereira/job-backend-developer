@@ -11,7 +11,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="tb_user_intelipost")
+@Table(name = "tb_user_intelipost")
 public class UserIntelipost implements Serializable {
 
 	private static final long serialVersionUID = -6561175049347593808L;
@@ -37,7 +37,6 @@ public class UserIntelipost implements Serializable {
 		this.name = name;
 		this.email = email;
 	}
-	
 
 	public UserIntelipost(Long id, String password, String name, String email) {
 		super();

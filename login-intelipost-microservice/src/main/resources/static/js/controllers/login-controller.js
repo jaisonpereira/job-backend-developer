@@ -7,8 +7,7 @@ angular.module('intelipostLogin').controller('LoginController',function($scope, 
 	}
 	
 	$scope.login = ()=>{
-		 $http.post('/login',$scope.credenciais).success((data)=> {
-			 console.log(data);
+		 $http.post('/login',$scope.credenciais).success((data, status, headers, config)=> {
 			 $scope.error=undefined
 			 $scope.logado=true
 		 }).error((error)=> {

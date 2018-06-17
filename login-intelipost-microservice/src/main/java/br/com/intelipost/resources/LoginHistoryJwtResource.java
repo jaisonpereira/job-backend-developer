@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.intelipost.config.services.LoginHistoryJwtService;
 import br.com.intelipost.domain.LoginHistoryJwt;
 
+/**
+ * @author jpereira End Point disponibiliza consulta de tokens utilizados na
+ *         aplicacao
+ */
 @RestController
 public class LoginHistoryJwtResource {
 
