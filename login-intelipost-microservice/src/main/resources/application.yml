@@ -12,10 +12,9 @@ spring:
     validationQuery: SELECT 1
     initiliaze: true
   jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        ddl-auto: update
+    hibernate:
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      ddlAuto: update
   redis:
     host: localhost
 
@@ -44,5 +43,3 @@ eureka:
     fetchRegistry: true
     serviceUrl:
       defaultZone: http://eureka:8761/eureka
-  instance:
-    hostname: localhost

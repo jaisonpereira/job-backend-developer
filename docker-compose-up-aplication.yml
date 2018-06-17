@@ -19,17 +19,37 @@ zuul-gateway:
   image: intelipost/zuul-gateway
   links:
     - eureka
-    - login-intelipost-microservice_1
+    - login-intelipost-microservice_one
+    - login-intelipost-microservice_two
+    - login-intelipost-microservice_three
   expose:
     - "8080"
   ports:
     - "8080:8080"
 
-login-intelipost-microservice_1:
+login-intelipost-microservice_one:
   image: intelipost/login-intelipost-microservice
   links:
-    - eureka
     - postgres
     - redis
+    - eureka
   expose:
-    - "8100"
+    - "8081"
+
+login-intelipost-microservice_two:
+  image: intelipost/login-intelipost-microservice
+  links:
+    - postgres
+    - redis
+    - eureka
+  expose:
+    - "8081"
+
+login-intelipost-microservice_three:
+  image: intelipost/login-intelipost-microservice
+  links:
+    - postgres
+    - redis
+    - eureka
+  expose:
+    - "8081"
