@@ -7,7 +7,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.ComponentScan;
 
 //TODO HABILITAR EUREKA CLIENT
-@EnableEurekaClient
+//@EnableEurekaClient
 @SpringBootApplication
 @ComponentScan(basePackages = "br.com.intelipost")
 @EnableCaching
