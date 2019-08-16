@@ -1,36 +1,39 @@
 # Spring Cloud - Login Storm System
 
-### Análise do cenário atual
+### Current scenario analysis
 
->  1- Imagine que hoje tenhamos um sistema de login e perfis de usuários. O sistema conta com mais de 10 milhões de usuários, sendo que temos um acesso concorrente de cerca de 5 mil usuários. Hoje a tela inicial do sistema se encontra muito lenta. Nessa tela é feita uma consulta no banco de dados para pegar as informações do usuário e exibi-las de forma personalizada. Quando há um pico de logins simultâneos, o carregamento desta tela fica demasiadamente lento. Na sua visão, como poderíamos iniciar a busca pelo problema, e que tipo de melhoria poderia ser feita?
+>  1- Imagine that we have a login system and user profiles today. The system has more than 10 million users, and we have a concurrent access of about 5,000 users. Today the system home screen is very slow. In this screen is made a query in the database to get the user information and display it in a personalized way. When there is a spike in simultaneous logins, loading of this screen becomes too slow. In your view, how could we begin the search for the problem, and what kind of improvement could be made?
 >  
-R: Iniciaremos a busca pelos problemas através de métricas de uso da CPU/Memory utilizando Jmeter,  constatado uso excessivo partiríamos para a arquitetura de comunicação com o Banco ,ferramentas de métricas de queries como Hibernate Statistics (caso esteja utilizando JPA) pode nos auxiliar a determinar pontos de melhoria no sistema.
-Por se tratar de uma aplicação que recebe muitos acessos concorrentes em determinados horários,  adotar uma arquitetura escalavél é solução mais viável ,após o desenvolvimento da estrutura base de login escalável podemos hospedar em um serviço que possua um auto-scalling automático efetuando um decrease nos momentos de baixo uso viabilizando o custo 
-Pontos com uma enorme frequência de acesso podem ser elevados a um cache de segundo nível .
+Answer: We will start searching for problems through CPU / Memory usage metrics using Jmeter, found that we would go to the Database communication for see, query metrics tools like Hibernate Statistics (if using JPA) can help us determine points of system improvement.
+Because it is an application that receives many concurrent accesses at certain times, adopting a scalable architecture is the most viable solution. After the development of the scalable login base structure we can host a service that has an automatic auto-scalling, decreasing the moments. low-cost, enabling the cost
+Points with a huge access frequency can be elevated to a second level cache.
 
 
-> 2 - Com base no problema anterior, gostaríamos que você codificasse um novo sistema de login para muitos usuários simultâneos e carregamento da tela inicial. Lembre-se que é um sistema web então teremos conteúdo estático e dinâmico. Leve em consideração também que na empresa existe um outro sistema que também requisitará os dados dos usuários, portanto, este sistema deve expor as informações para este outro sistema de alguma maneira
+> 2 - Based on the previous issue, we would like you to code a new login system for many simultaneous users and home screen loading. Remember that it is a web system so we will have static and dynamic content. Also take into consideration that in the company there is another system that will also request user data, so this system must expose the information to this other system in some way.
 
-A Solução viabilizada para o login com uma carga alta de uso foi desenvolver um sistema que tenha possibilidade de se escalar  conforme a necessidade de uso .
+The solution made possible to login with a high usage load was to develop a system that can scale as needed.
 
+#### A Stack - Spring Cloud + Netflix OSS:
 
-#### A Stack adotada foi Spring Cloud + Netflix OSS:
+* #### Eureka Server - Netflix API
+The word eureka was supposedly pronounced by the scientist
+Archimedes (287 BC - 212 BC) when he discovered how
+solve a complex dilemma. In our context, it looks for all Spring Cloud services and allows them to register with it
+to become available for use.
 
-* #### Eureka Server
-A palavra eureka foi supostamente  pronunciada pelo  cientista
-grego Arquimedes (287 a.C. – 212 a.C.), quando descobriu como
-resolver um complexo dilema. No	nosso contexto, ela procura todos os serviços do Spring Cloud e permite que	se registrem	nela
-para tornarem-se disponíveis para uso.
-* #### Zuul Gateway
-No filme Caça Fantasmas, de 1984, Zuul era o	 porteiro do
-portal de Gozer, um	 deus	 antigo que queria trazer todos os
-demônios de	 seu universo	 para a cidade de New York. No nosso
-contexto, ele	 que receberá todas	 as requisições e enviará aos
-servidores disponíveis, consultado o eureka server
+* #### Zuul Gateway - Netflix API
+In the 1984 Ghostbuster movie, Zuul was the doorman of the
+portal of Gozer, an ancient god who wanted to bring all the
+demons from your universe to the city of New York. In our
+context, he who will receive all requests and send to
+available servers, consulted the eureka server
 
-* ####  Login-intelipost-microservice
-Serviço desenvolvido para que possa receber cada request de forma distribuída , serviço stateless facilita escalonamento do mesmo por não guardar estado.
+* ####  Login-intelipost-microservice-api
+
+Service designed to receive each request in a distributed way, stateless service facilitates scheduling of it by not saving state.
+
 Stack
+
 * Spring boot
 * Docker
 * Apache Maven
@@ -38,45 +41,49 @@ Stack
 * JWT
 * Spring Data JPA - Hibernate
 * Spring Data + Redis Cache
-* #### Evolução de estratégia de Consulta aos  usuários Postgres 
 
-A princípio a solução adotada foi realizar consulta utilizando Hibernate Stateless Session (Uma sessão sem estado que não implementa um cache de primeiro nível  do hibernate nem interage com nenhum cache de segundo nível  do hibernate) 
-porém por se tratar de um sistema com uma base de usuários na casa dos milhares
-a solução ideal constatada por um benchmark realizado com hibernate statistics 
-foi utilizar jdbc , independente da estrategia que se utilize com hibernate o número de acesso simultâneos degrada a performance exponencialmente.
-Com o propósito de melhorar a performance  dos acessos  ao postgres foi implementado a estratégia de cacheamento utilizando spring-cache + spring-data-redis.
+* #### Postgres User Query Strategy Evolution
 
-* Estratégia de Autenticação
-Para autenticação e autorização foi utilizado +Spring-Security-JWT  utilizando a especificação RFC 7519 (https://jwt.io/) - Facilitando a escalabilidade e dispensando  a necessidade de se trocar cookies entre aplic  e browser ou utilizar estratégias como  sessão distribuída ,Session Migration , Sticky Session (Aws), 
-Adotamos uma abordagem que nos beneficia com uma facilidade de escalonamento  e compatível com a maioria das aplicações(Principalmente com dispositivos móveis) existentes no mercado.em um cenário futuro o secret-token e o expiration-time podem ser compartilhado utilizando-se o config server dessa forma podemos alterar a estratégia de autenticação sem afetar a aplicação em runtime
-De modo geral poderemos não se preocupar com uma proteção  CSRF (Cross-Site Request Forgery
-), pois estaremos  trabalhando com um  sistema  “stateless”.
+At first the solution adopted was to query using Hibernate Stateless Session (A stateless session that does not implement a hibernate first level cache or interact with any hibernate second level cache)
+but because it is a system with a user base in the thousands
+the ideal solution found by a benchmark with hibernate statistics
+was using jdbc, regardless of the strategy used with hibernate the number of simultaneous access degrades performance exponentially.
+In order to improve the performance of postgres accesses, the caching strategy was implemented using spring-cache + spring-data-redis.
 
-* Para a disponibilizar os usuários logados  persistimos o histórico dos tokens utilizados,email de login ,data de autenticação e tempo de expiração do token  usando spring-data-redis ,dessa forma os micro-serviços podem consultar o histórico de  usuários logados na aplicação usando o critério de data de expiração disponível no momento da geração do token além de disponibilizar uma forma de consultar os usuários logados(Usando o critério de timeout do token) de quebra obteremos dados que podem ser utilizados para formalizarmos dados  estatísticos  de uso como métricas de frequência e etc.
-Caso o load-balancer caia e o usuário seja redirecionado para um server geograficamente distinto que ainda não recebeu a distribuição dos dados entre os cluster  e o JWT do usuário ainda esteja válido não há queda de sessão. 
+
+* Authentication Strategy
+
+For authentication and authorization was used + Spring-Security-JWT using specification RFC 7519 (https://jwt.io/) - Facilitating scalability and eliminating the need to exchange cookies between applications and browsers or use strategies such as distributed session, Session Migration, Sticky Session (Aws),
+We take an approach that benefits us from scalability that is compatible with most applications (Especially mobile devices) on the market. In a future scenario secret-token and expiration-time can be shared using the config server. this way we can change the authentication strategy without affecting the runtime application
+In general we may not worry about Cross-Site Request Forgery (CSRF) protection.
+), as we will be working with a stateless system.
+
+* To make logged in users available we persist the history of tokens used, login email, authentication date and token expiration time using spring-data-redis, so microservices can consult the logged in user history using the application. the expiration date criterion available at the time of token generation in addition to providing a way to query logged in users (using the token timeout criterion) we will get data that can be used to formalize usage statistics as frequency metrics and etc.
+If the load-balancer drops and the user is redirected to a geographically distinct server that has not yet received data distribution between the clusters and the user's JWT is still valid there is no session drop.
 
 
 ### Build and Deploy 
-Premissas Git , Linux,Java 8,docker/docker-compose,JAVA_HOME
+Requirements Git , Linux,Java 8,docker/docker-compose,JAVA_HOME
 
-1.  clonar este repositório
-2.  dar permissão ao script de deploy caso necessário 
+1. Clone this repository
+2.  give permission for the script if necessary 
 sudo chmod +x deploy-and-run.sh
-3. executar script 
+3. execute the script 
 ./deploy-and-run.sh
 
-4. acessar logins http://localhost:8080/
-consultar serviços disponíveis http://localhost:8761/eureka
+4. Access the login http://localhost:8080/
 
-> * OBS:
-> - Aguardar término “register-server” dos serviços executados.
-> - docker ter permissão de execução sem o sudo
-> - clonar em pasta que nao necessite de permissões adicionais
+5. View the availables serves http://localhost:8761/eureka
 
-Users disponíveis
+> * Observation:
+> - Wait the finish “register-server” by service execution (Heart Beat).
+> - docker needed permission to run without sudo
+> - Clone in the folder doesnt need more permission by default 
+
+Users available
 
 > user: jaison@intelipost
 > pass: recrutado
 
 > user: admin@admin
-> senha: admin
+> pass: admin
